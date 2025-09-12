@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>포커</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reset-css@5.0.2/reset.min.css">
+  <link rel="stylesheet" href="common.css">
+</head>
+
+<body>
+  <div id="field">
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-front"></div>
+        <div class="card-back"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-front"></div>
+        <div class="card-back"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-front"></div>
+        <div class="card-back"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-front"></div>
+        <div class="card-back"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-front"></div>
+        <div class="card-back"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <div class="realm">
+      <button onclick="flipCard(5)">테스트</button>
+      <div oncontextmenu="alert('우클릭 감지!');">
+        우클릭 해보세요
+      </div>
+    </div>
+    <div class="realm">
+      <div id="money">
+        <div id="my-money">내 돈
+          8300</div>
+        <div id="my-bet-money">나의 벳팅
+          0</div>
+      </div>
+      <div id="bet-button">
+        <button id="bet50" onclick="bet(50)" oncontextmenu="withdraw(50)"></button>
+        <button id="bet100" onclick="bet(100)" oncontextmenu="withdraw(100)"></button>
+        <button id="bet250" onclick="bet(250)" oncontextmenu="withdraw(250)"></button>
+        <button id="bet500" onclick="bet(500)" oncontextmenu="withdraw(500)"></button>
+        <button id="bet1000" onclick="bet(1000)" oncontextmenu="withdraw(1000)"></button>
+      </div>
+      <div id="buttons">
+        <button id="auto-bet">맞춰내기</button>
+        <button id="end-bet">베팅 종료</button>
+        <button id="fold">폴드</button>
+        <button id="check">체크</button>
+      </div>
+    </div>
+  </div>
+  <div id="my-field">
+    <div class="card card-front" style="width : 13rem; height : 20rem; position : static;"></div>
+    <div class="card card-front" style="width : 13rem; height : 20rem; position : static;"></div>
+  </div>
+  <script src="scripts.js"></script>
+</body>
+
+</html>
