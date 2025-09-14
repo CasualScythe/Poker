@@ -34,14 +34,14 @@ for (let i = 0; i < cardFronts.length; i++) {
   cardFronts[i].style.backgroundImage = `url(${images[i]})`;
 }
 
-//처음 7장 카드 nowCards에 추가
+//처음 2장 카드 nowCards에 추가
 nowCards.push(images[5].slice(7, -4));
 nowCards.push(images[6].slice(7, -4));
 
-//언젠가 쓰지 않을까 해서 만든 랜드인트
-function randInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+// //언젠가 쓰지 않을까 해서 만든 랜드인트
+// function randInt(min, max) {
+//   return Math.floor(Math.random() * (max - min + 1)) + min;
+// }
 
 // //배팅 로직
 // function bettingLogic() {
@@ -64,10 +64,10 @@ function nextCard() {
     flipCard(3);
   } //처음 카드 공개
   else if (openCard == 3) {
-    flipCard(1);
+    flipCard(4);
   } //두번째 카드 공개
   else if (openCard == 4) {
-    flipCard(1);
+    flipCard(5);
   } //마지막 카드 공개
 }
 
@@ -75,15 +75,64 @@ function nextCard() {
 function flipCard(num) {
   for (let i = openCard; i < num; i++) {
     cardInners[i].style.transform = "rotateY(0deg)";
-    nowCards.push(images[i].slice(7, -4));
+    nowCards.push(images[i].slice(7, -4));//nowCards에 공개된 카드 추가
     openCard++;
   }
+  rankingLogic();
+}
 
+//리스트 개수 세기 로직
+function countList(li) {
+  let elements = [];
+  let counts = [];
+  for (let i = 0; i < li.length; i++) {
+    if(elements.includes(li[i])) {
+      counts[elements.indexOf(li[i])] += 1;
+    } 
+    else {
+      elements.push(li[i]);
+      counts.push(1);
+    }
+  }
+  return { elements, counts };
 }
 
 //족보 판단 로직
 function rankingLogic() {
+  let nowNumbers = [];
+  let nowTypes = [];
+  for (let i = 0; i < nowCards.length; i++) {
+    nowNumbers.push(nowCards[i].slice(0, -1));
+    nowTypes.push(nowCards[i].slice(-1));
+  }
+  let isFlush = Math.max(...countList(nowTypes).counts) >= 5;
+  let isFourCard = Math.max(...countList(nowNumbers).counts) === 4;
+  let isTriple = Math.max(...countList(nowNumbers).counts) === 3;
+  let isPair = Math.max(...countList(nowNumbers).counts) === 2;
+  let isFullHouse = isTriple && isPair;
+  if(isFourCard) {
+    console.log("포카드");
+  }
+  
+  else if(isFullHouse) {
+    console.log("풀하우스");
+  }
+  
+  else if(isFlush) {
+    console.log("플러쉬");
+  }
 
+  else if(isTriple) {
+    console.log("트리플");
+  }
+
+  else if(isPair) {
+    console.log("페어");
+  }
+
+  else {
+    console.log("하이카드");
+  }
 }
 
 //다음 게임 로직
@@ -120,3 +169,5 @@ function withdraw(cost) {
     showBetMoney.textContent = `나의 베팅\n${betMoney}`;
   }
 }
+
+rankingLogic();
