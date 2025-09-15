@@ -4,6 +4,7 @@ const cardInners = document.getElementsByClassName("card-inner");
 const cardFronts = document.getElementsByClassName("card-front");
 const showMyMoney = document.getElementById("my-money");
 const showBetMoney = document.getElementById("my-bet-money");
+const showRanking = document.getElementById("ranking");
 
 let isBettingSame = false; //배팅이 같은지
 let openCard = 0; //공개된 카드 수
@@ -11,6 +12,7 @@ let images = []; //카드 이미지 경로 배열
 let nowCards = []; //현재 필드에 있는 카드
 let myMoney = 8300; //내 돈
 let betMoney = 0; //배팅 금액
+let nowRanking = "하이카드"; //현재 족보
 
 //카드 이미지 경로 배열 생성
 for (let value of cardValues) {
@@ -101,38 +103,76 @@ function countList(li) {
 function rankingLogic() {
   let nowNumbers = [];
   let nowTypes = [];
-  for (let i = 0; i < nowCards.length; i++) {
+  let nowRealNumbers = []; //스트레이트를 판단하기 위해서 문자(A, J, Q, K)를 숫자로 바꾼 리스트
+  let isStraight = false;
+  let isRoyalStraight = false;
+  for (let i = 0; i < nowCards.length; i++) { //nowCards를 숫자와 모양으로 분리해서 각각 리스트에 저장
     nowNumbers.push(nowCards[i].slice(0, -1));
     nowTypes.push(nowCards[i].slice(-1));
+  }
+  for (let i = 0; i < nowNumbers.length; i++) { //스트레이트를 판단하기 위해서 nowRealNumbers에 숫자 저장
+    if (nowNumbers[i] === 'A') {
+      nowRealNumbers.push(1);
+      nowRealNumbers.push(14);
+    }
+    else if (nowNumbers[i] === 'J') {
+      nowRealNumbers.push(11);
+    }
+    else if (nowNumbers[i] === 'Q') {
+      nowRealNumbers.push(12);
+    }
+    else if (nowNumbers[i] === 'K') {
+      nowRealNumbers.push(13);
+    }
+    else {
+      nowRealNumbers.push(parseInt(nowNumbers[i]));
+    }
+  }
+  for (let i = 0; i < nowRealNumbers.length; i++) { //스트레이트 & 로얄 스트레이트 판단
+    if (nowRealNumbers.includes(nowRealNumbers[i] + 1) && nowRealNumbers.includes(nowRealNumbers[i] + 2) && nowRealNumbers.includes(nowRealNumbers[i] + 3) && nowRealNumbers.includes(nowRealNumbers[i] + 4)) {
+      if (nowRealNumbers[i] === 10) {
+        isRoyalStraight = true;
+      }
+    isStraight = true;
+    }
   }
   let isFlush = Math.max(...countList(nowTypes).counts) >= 5;
   let isFourCard = Math.max(...countList(nowNumbers).counts) === 4;
   let isTriple = Math.max(...countList(nowNumbers).counts) === 3;
   let isPair = Math.max(...countList(nowNumbers).counts) === 2;
   let isFullHouse = isTriple && isPair;
-  if(isFourCard) {
-    console.log("포카드");
+  let isTwoPair = countList(nowNumbers).counts.filter(x => x === 2).length >= 2;
+  if (isRoyalStraight && isFlush) {
+    nowRanking = "로얄 스트레이트 플러쉬";
   }
-  
+  if (isStraight && isFlush) {
+    nowRanking = "스트레이트 플러쉬";
+  }
+  else if(isFourCard) {
+    nowRanking = "포카드";
+  }
   else if(isFullHouse) {
-    console.log("풀하우스");
+    nowRanking = "풀 하우스";
   }
-  
   else if(isFlush) {
-    console.log("플러쉬");
+    nowRanking = "플러쉬";
   }
-
+  else if(isStraight) {
+    nowRanking = "스트레이트";
+  }
   else if(isTriple) {
-    console.log("트리플");
+    nowRanking = "트리플";
   }
-
+  else if(isTwoPair) {
+    nowRanking = "투 페어";
+  }
   else if(isPair) {
-    console.log("페어");
+    nowRanking = "원 페어";
   }
-
   else {
-    console.log("하이카드");
+    nowRanking = "하이 카드";
   }
+  showRanking.textContent = `${nowRanking}`;
 }
 
 //다음 게임 로직
