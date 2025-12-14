@@ -1,4 +1,7 @@
 # Poker
+contributors
+[다람쥐](https://github.com/tornadosquirrel)
+[노란 금붕어](https://github.com/ykh0624)
 
 ## 버전 1.0.0
 - 기본 디자인
